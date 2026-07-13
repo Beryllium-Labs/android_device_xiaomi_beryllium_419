@@ -36,3 +36,8 @@ TARGET_RECOVERY_FSTAB := $(DEVICE_PATH)/init/fstab.qcom
 
 # Inherit from the proprietary version
 include vendor/xiaomi/beryllium/BoardConfigVendor.mk
+
+# Camera
+$(call soong_config_set_bool,camera,override_format_from_reserved,true)
+$(call soong_config_set,camera,package_name,com.android.camera)
+TARGET_USES_MIUI_CAMERA := true

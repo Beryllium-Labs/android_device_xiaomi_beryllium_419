@@ -97,3 +97,6 @@ PRODUCT_SOONG_NAMESPACES += \
 # WiFi
 PRODUCT_PACKAGES += \
     TargetWifiOverlay
+
+# Camera
+$(call inherit-product-if-exists, device/xiaomi/miuicamera-beryllium/config.mk)
