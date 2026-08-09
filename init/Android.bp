@@ -4,6 +4,13 @@
 //
 
 prebuilt_etc {
+    name: "ax_init_sdm845.rc",
+    src: "ax_init_sdm845.rc",
+    sub_dir: "init",
+    soc_specific: true,
+}
+
+prebuilt_etc {
     name: "fstab.qcom",
     src: "fstab.qcom",
     soc_specific: true,

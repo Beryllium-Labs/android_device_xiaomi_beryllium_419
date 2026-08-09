@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+     SDM845 has two CPU clusters: policy0 (Kryo 385 Silver, cpu0-3) and
+     policy4 (Kryo 385 Gold, cpu4-7).
+
+     The frequency lists are hardcoded on purpose: scaling_available_frequencies
+     does not report the boost frequencies of the Gold cluster (2707200 - 2803200),
+     which are part of the stock range (cpuinfo_max_freq is 2803200). Reading the
+     list from sysfs would therefore cap the big cluster below stock.
+-->
+<kernel-manager>
+    <cpu
+        id="little"
+        group="Little CPU"
+        minId="axion_min_freq"
+        maxId="axion_max_freq"
+        governorId="little_cpu_governor"
+        minNode="/sys/devices/system/cpu/cpufreq/policy0/scaling_min_freq"
+        maxNode="/sys/devices/system/cpu/cpufreq/policy0/scaling_max_freq"
+        governorNode="/sys/devices/system/cpu/cpufreq/policy0/scaling_governor"
+        governorAvailablePath="/sys/devices/system/cpu/cpufreq/policy0/scaling_available_governors"
+        values="300000,403200,480000,576000,652800,748800,825600,902400,979200,1056000,1132800,1228800,1324800,1420800,1516800,1612800,1689600,1766400" />
+
+    <cpu
+        id="big"
+        group="Big CPU"
+        minId="axion_min_freq_big"
+        maxId="axion_max_freq_big"
+        governorId="big_cpu_governor"
+        minNode="/sys/devices/system/cpu/cpufreq/policy4/scaling_min_freq"
+        maxNode="/sys/devices/system/cpu/cpufreq/policy4/scaling_max_freq"
+        governorNode="/sys/devices/system/cpu/cpufreq/policy4/scaling_governor"
+        governorAvailablePath="/sys/devices/system/cpu/cpufreq/policy4/scaling_available_governors"
+        values="825600,902400,979200,1056000,1209600,1286400,1363200,1459200,1536000,1612800,1689600,1766400,1843200,1920000,1996800,2092800,2169600,2246400,2323200,2400000,2476800,2553600,2649600,2707200,2764800,2784000,2803200" />
+
+    <gpu
+        node="/sys/class/kgsl/kgsl-3d0/devfreq"
+        currentNode="/sys/class/kgsl/kgsl-3d0/gpuclk"
+        usageNode="/sys/class/kgsl/kgsl-3d0/gpu_busy_percentage"
+        frequencyMultiplier="1"
+        values="710000000,675000000,596000000,520000000,414000000,342000000,257000000" />
+</kernel-manager>

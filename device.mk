@@ -65,6 +65,7 @@ PRODUCT_COPY_FILES += \
 
 # Device init scripts
 PRODUCT_PACKAGES += \
+    ax_init_sdm845.rc \
     init.target.rc
 
 # GPS
@@ -85,6 +86,10 @@ PRODUCT_COPY_FILES += \
     $(LOCAL_PATH)/keylayout/gpio-keys.kl:system/usr/keylayout/gpio-keys.kl \
     $(LOCAL_PATH)/keylayout/uinput-fpc.kl:system/usr/keylayout/uinput-fpc.kl \
     $(LOCAL_PATH)/keylayout/uinput-goodix.kl:system/usr/keylayout/uinput-goodix.kl
+
+# Kernel manager
+PRODUCT_COPY_FILES += \
+    $(LOCAL_PATH)/configs/kernel/ax_kernel_manager_sdm845.xml:$(TARGET_COPY_OUT_SYSTEM_EXT)/etc/ax_kernel_manager.xml
 
 # QDCM
 PRODUCT_COPY_FILES += \
