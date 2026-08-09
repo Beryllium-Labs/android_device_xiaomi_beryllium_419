@@ -1,6 +1,9 @@
 #
 # Beryllium Auto Patch System
-# SurfaceFlinger - Disable HW Overlays by default
+#
+# Applies the patches under device/xiaomi/beryllium/patches to their
+# respective source repositories at lunch time. Add a new entry to the
+# PATCHES array below as "<patch file>|<target dir relative to source root>".
 #
 apply_beryllium_patches() {
     # Colors
@@ -31,43 +34,49 @@ apply_beryllium_patches() {
         return 1
     fi
 
-    local PATCH_FILE="${ANDROID_BUILD_TOP}/device/xiaomi/beryllium/patches/disable_hw_overlays.patch"
-    local TARGET_DIR="${ANDROID_BUILD_TOP}/frameworks/native"
+    local PATCH_DIR="${ANDROID_BUILD_TOP}/device/xiaomi/beryllium/patches"
 
     echo -e "📂 ${BLUE}Mã nguồn${RESET}      : ${ANDROID_BUILD_TOP}"
-    echo -e "📦 ${BLUE}Patch${RESET}        : $(basename "${PATCH_FILE}")"
 
     #
-    # Check patch
+    # List of patches to apply: "<patch file>|<target dir>"
     #
-    echo
-    echo -e "🔍 ${CYAN}Đang kiểm tra patch...${RESET}"
+    local PATCHES=(
+        "disable_hw_overlays.patch|frameworks/native"
+        "preload_statslog.patch|frameworks/base"
+    )
 
-    if [ ! -f "${PATCH_FILE}" ]; then
-        echo -e "❌ ${RED}Không tìm thấy file patch.${RESET}"
-        return 1
-    fi
+    local entry PATCH_FILE TARGET_REL TARGET_DIR
+    for entry in "${PATCHES[@]}"; do
+        PATCH_FILE="${PATCH_DIR}/${entry%%|*}"
+        TARGET_REL="${entry##*|}"
+        TARGET_DIR="${ANDROID_BUILD_TOP}/${TARGET_REL}"
 
-    if [ ! -d "${TARGET_DIR}/.git" ]; then
-        echo -e "❌ ${RED}frameworks/native không phải Git repository.${RESET}"
-        return 1
-    fi
+        echo
+        echo -e "📦 ${BLUE}Patch${RESET}        : $(basename "${PATCH_FILE}") → ${TARGET_REL}"
 
-    #
-    # Apply patch
-    #
-    echo -e "⚙️  ${CYAN}Đang áp dụng patch...${RESET}"
-
-    if git -C "${TARGET_DIR}" apply --check "${PATCH_FILE}" >/dev/null 2>&1; then
-        if git -C "${TARGET_DIR}" apply --whitespace=fix "${PATCH_FILE}"; then
-            echo -e "✅ ${GREEN}Đã áp dụng patch thành công.${RESET}"
-        else
-            echo -e "❌ ${RED}Không thể áp dụng patch.${RESET}"
-            return 1
+        if [ ! -f "${PATCH_FILE}" ]; then
+            echo -e "❌ ${RED}Không tìm thấy file patch.${RESET}"
+            continue
         fi
-    else
-        echo -e "⚠️  ${YELLOW}Patch đã được áp dụng hoặc không còn tương thích với source hiện tại.${RESET}"
-    fi
+
+        if [ ! -d "${TARGET_DIR}/.git" ]; then
+            echo -e "❌ ${RED}${TARGET_REL} không phải Git repository.${RESET}"
+            continue
+        fi
+
+        echo -e "⚙️  ${CYAN}Đang áp dụng patch...${RESET}"
+
+        if git -C "${TARGET_DIR}" apply --check "${PATCH_FILE}" >/dev/null 2>&1; then
+            if git -C "${TARGET_DIR}" apply --whitespace=fix "${PATCH_FILE}"; then
+                echo -e "✅ ${GREEN}Đã áp dụng patch thành công.${RESET}"
+            else
+                echo -e "❌ ${RED}Không thể áp dụng patch.${RESET}"
+            fi
+        else
+            echo -e "⚠️  ${YELLOW}Patch đã được áp dụng hoặc không còn tương thích với source hiện tại.${RESET}"
+        fi
+    done
 
     echo
     echo -e "${CYAN}━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━${RESET}"

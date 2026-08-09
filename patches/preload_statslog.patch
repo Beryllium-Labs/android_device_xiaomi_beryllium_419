@@ -1,0 +1,37 @@
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: jiro28 <ktgithub28@gmail.com>
+Date: Sun, 9 Aug 2026 21:00:00 +0900
+Subject: [PATCH] config: preloaded-classes: Preload android.util.StatsLog
+
+Some hardened apps (e.g. banking RASP wrappers) load a native library
+from a class initializer whose JNI_OnLoad opens a TLS connection. When
+another thread is already inside a System.loadLibrary() holding the
+Runtime lock, Conscrypt's handshake path reaches
+ConscryptStatsLog.write -> android.util.StatsLog.<clinit>, which calls
+System.loadLibrary("stats_jni") and blocks on that same Runtime lock.
+The two threads deadlock and the app ANRs at startup ("failed to
+complete startup").
+
+Preloading android.util.StatsLog in zygote runs its class initializer
+(and loads stats_jni) once, before any fork, so the app never triggers
+the lazy <clinit> on a locked path. Fixes the TPBank (com.tpb.mb.
+gprsandroid) startup hang.
+
+Change-Id: I5ta7510900000000000000000000000000000000
+---
+ config/preloaded-classes | 1 +
+ 1 file changed, 1 insertion(+)
+
+--- a/config/preloaded-classes
++++ b/config/preloaded-classes
+@@ -9054,6 +9054,7 @@
+ android.util.Spline$MonotoneCubicSpline
+ android.util.Spline
+ android.util.StateSet
++android.util.StatsLog
+ android.util.StringBuilderPrinter
+ android.util.SuperNotCalledException
+ android.util.SystemConfigFileCommitEventLogger
+-- 
+2.43.0
+
