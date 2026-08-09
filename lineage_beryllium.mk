@@ -21,3 +21,13 @@ PRODUCT_BUILD_PROP_OVERRIDES += \
     BuildFingerprint=Xiaomi/beryllium/beryllium:10/QKQ1.190828.002/V12.0.3.0.QEJMIXM:user/release-keys
 
 PRODUCT_GMS_CLIENTID_BASE := android-xiaomi
+
+# Axion Flags
+AXION_MAINTAINER := Jiro
+AXION_PROCESSOR := Qualcom_Snapdragon®_845
+TARGET_ENABLE_BLUR := true
+PERF_GOV_SUPPORTED := true
+PERF_DEFAULT_GOV := schedutil
+PERF_ANIM_OVERRIDE := true
+AXION_CAMERA_REAR_INFO := 12,5
+AXION_CAMERA_FRONT_INFO := 20
