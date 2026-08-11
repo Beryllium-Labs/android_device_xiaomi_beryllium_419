@@ -1,0 +1,5 @@
+# Axion common defaults RenderEngine to Vulkan (skiavkthreaded), which
+# renders video with wrong colors while HW overlays are disabled. Force
+# GLES before SurfaceFlinger starts; this overrides the product build.prop.
+on init
+    setprop debug.renderengine.backend skiaglthreaded

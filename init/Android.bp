@@ -11,6 +11,13 @@ prebuilt_etc {
 }
 
 prebuilt_etc {
+    name: "init.beryllium.rc",
+    src: "init.beryllium.rc",
+    sub_dir: "init",
+    system_ext_specific: true,
+}
+
+prebuilt_etc {
     name: "fstab.qcom",
     src: "fstab.qcom",
     soc_specific: true,

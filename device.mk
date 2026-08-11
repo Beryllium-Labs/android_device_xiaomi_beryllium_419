@@ -66,6 +66,7 @@ PRODUCT_COPY_FILES += \
 # Device init scripts
 PRODUCT_PACKAGES += \
     ax_init_sdm845.rc \
+    init.beryllium.rc \
     init.target.rc
 
 # GPS
