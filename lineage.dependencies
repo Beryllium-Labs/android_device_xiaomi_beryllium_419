@@ -1,0 +1,11 @@
+[
+  {
+    "repository": "android_device_xiaomi_sdm845-common_419",
+    "target_path": "device/xiaomi/sdm845-common"
+  },
+  {
+    "repository": "Jiro_kernel_ctrl",
+    "target_path": "packages/apps/Jiro_kernel_ctrl",
+    "branch": "17.0"
+  }
+]
