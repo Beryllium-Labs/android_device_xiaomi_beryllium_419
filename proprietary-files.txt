@@ -192,6 +192,7 @@ vendor/bin/mlid
 vendor/bin/slim_daemon
 vendor/bin/xtra-daemon
 vendor/bin/xtwifi-client
+vendor/app/CACertService/CACertService.apk
 vendor/bin/xtwifi-inet-agent
 vendor/etc/init/android.hardware.gnss@2.0-service-qti.rc
 vendor/etc/vintf/manifest/android.hardware.gnss@2.0-service-qti.xml
